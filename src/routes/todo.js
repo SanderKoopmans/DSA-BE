@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { check, validationResult } = require('express-validator');
 const { addTodo, getTodoById } = require('../dataStore');
 
 const TodoRoute = Router({ mergeParams: true });
@@ -9,11 +10,21 @@ TodoRoute.get('/:id', (req, res) => {
     return res.send(getTodoById(id));
 });
 
-TodoRoute.post('/', function (req,res) {
-    // TODO: Validate the request body
-
-
-    addTodo(req.body);
+TodoRoute.post('/', [
+    check('title')
+        .isString()
+        .isAlphanumeric()
+        .isLength({ min: 3 }),
+    check('created')
+        .isString()
+        .isISO8601(),
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+    res.send({ status: 200 });
+    return addTodo(req.body);
 });
 
 // Validation tests
@@ -39,8 +50,5 @@ TodoRoute.post('/', function (req,res) {
 // - test if format matches format as specified in the API documentation
 
 // - test if route responds with 400 if any additional properties are added
-
-
-
 
 module.exports = TodoRoute;

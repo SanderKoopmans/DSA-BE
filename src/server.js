@@ -1,9 +1,9 @@
 const express = require('express');
 const TodoRoute = require('./routes/todo');
 const FizzBuzzRoute = require('./routes/fizzBuzz');
+const config = require('./config');
 
-const PORT = process.env.PORT || 6766;
-
+const { PORT } = config;
 
 const app = express();
 app.use(express.json());

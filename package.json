@@ -24,6 +24,7 @@
     "nyc": "^15.1.0"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-validator": "^6.12.0"
   }
 }
